@@ -1,6 +1,6 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Package, Courier
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
@@ -33,3 +33,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+class PackageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Package
+        fields = ('description', 'status', 'sender', 'receiver')
+
+class CourierSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Courier
+        fields = ('name', 'status', 'package')

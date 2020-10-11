@@ -60,3 +60,32 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 		# Simplest possible answer: Yes, always
         return True
 
+class Package(models.Model):
+    description = models.TextField()
+    # Choices
+    PKG_STATUS = (
+		('U', 'Unassigned'),
+		('A', 'Assigned'),
+        ('P', 'Picked Up'),
+        ('D', 'Delivered')
+	)
+    status = models.CharField('Status', max_length=1, choices=PKG_STATUS, default='U', null=False)
+    sender = models.ForeignKey(CustomUser, related_name='package_sender', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(CustomUser,related_name='package_receiver', on_delete=models.CASCADE)
+
+    def _str_(self):
+        return self.description
+
+class Courier(models.Model):
+    name = models.CharField(max_length=120)
+    C_STATUS = (
+		('B', 'Busy'),
+		('A', 'Available')
+	)
+    status = models.CharField('User Type', max_length=1, choices=C_STATUS, default='A', null=False)
+    package = models.ForeignKey(Package, on_delete=models.PROTECT)
+
+    def _str_(self):
+        return self.name
+
+
